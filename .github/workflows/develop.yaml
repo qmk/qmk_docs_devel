@@ -16,7 +16,6 @@ jobs:
       with:
         ref: develop
         repository: 'qmk/qmk_firmware'
-        submodules: recursive
 
     - name: Install dependencies
       run: |
