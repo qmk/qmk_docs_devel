@@ -19,6 +19,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        python3 -m pip install -r requirements-dev.txt
         apt-get update && apt-get install -y rsync nodejs npm doxygen
         npm install -g moxygen
 
