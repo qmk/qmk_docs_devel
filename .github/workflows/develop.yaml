@@ -11,6 +11,9 @@ jobs:
     container: qmkfm/qmk_cli
 
     steps:
+    - name: Disable safe.directory check
+      run : git config --global --add safe.directory '*'
+
     - name: Checkout qmk_firmware
       uses: actions/checkout@v2
       with:
