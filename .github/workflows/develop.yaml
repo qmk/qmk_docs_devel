@@ -45,8 +45,8 @@ jobs:
       run: |
         source $HOME/.bashrc
         nvm use 20
-        qmk --verbose generate-docs
         echo "develop-docs.qmk.fm" > docs/public/CNAME
+        qmk --verbose generate-docs
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4.7.3
