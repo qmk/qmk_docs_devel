@@ -54,5 +54,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: .build/docs
+          clean: true
+          single-commit: true
           git-config-name: QMK Bot
           git-config-email: hello@qmk.fm
