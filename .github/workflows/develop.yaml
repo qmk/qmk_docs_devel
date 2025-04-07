@@ -1,43 +1,58 @@
 name: Periodic Develop Build
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron:  '0 * * * *'
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: qmkfm/qmk_cli
+    container: ghcr.io/qmk/qmk_cli
 
     steps:
     - name: Disable safe.directory check
       run : git config --global --add safe.directory '*'
 
     - name: Checkout qmk_firmware
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         ref: develop
         repository: 'qmk/qmk_firmware'
 
     - name: Install dependencies
       run: |
-        python3 -m pip install -r requirements-dev.txt
-        apt-get update && apt-get install -y rsync nodejs npm doxygen
-        npm install -g moxygen
+        apt-get update && apt-get install -y rsync doxygen
+        # install nvm
+        touch $HOME/.bashrc
+        wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+    - name: Install node
+      run: |
+        source $HOME/.bashrc
+        nvm install 20
+        nvm use 20
+        corepack enable
 
     - name: Build docs
       run: |
+        source $HOME/.bashrc
+        nvm use 20
         qmk --verbose generate-docs
-        rm .build/docs/CNAME
-        sed -i "s^basePath: '/'^basePath: '/qmk_docs_devel/'^" .build/docs/index.html
+        echo "develop-docs.qmk.fm" > docs/public/CNAME
 
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@4.1.5
+      uses: JamesIves/github-pages-deploy-action@v4.7.3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
-        folder: .build/docs
-        clean: true
-        single-commit: true
-        git-config-email: hello@qmk.fm
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: .build/docs
+          git-config-name: QMK Bot
+          git-config-email: hello@qmk.fm
