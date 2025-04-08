@@ -41,11 +41,17 @@ jobs:
         nvm use 20
         corepack enable
 
+    - name: Patch docs
+      run: |
+        echo "develop-docs.qmk.fm" > docs/public/CNAME
+        sed -i 's^QMK Firmware^QMK Firmare - Develop^g' builddefs/docsgen/.vitepress/config.mts
+        sed -i 's^edit/master/docs^edit/develop/docs^g' builddefs/docsgen/.vitepress/config.mts
+        sed -i 's^"https://github.com/qmk/qmk_firmware"^"https://github.com/qmk/qmk_firmware/tree/develop"^g' builddefs/docsgen/.vitepress/config.mts
+
     - name: Build docs
       run: |
         source $HOME/.bashrc
         nvm use 20
-        echo "develop-docs.qmk.fm" > docs/public/CNAME
         qmk --verbose generate-docs
 
     - name: Deploy
