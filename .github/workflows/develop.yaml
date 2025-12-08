@@ -22,14 +22,13 @@ jobs:
       run : git config --global --add safe.directory '*'
 
     - name: Checkout qmk_firmware
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         ref: develop
         repository: 'qmk/qmk_firmware'
 
     - name: Install dependencies
       run: |
-        apt-get update && apt-get install -y rsync doxygen
         # install nvm
         touch $HOME/.bashrc
         wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -55,12 +54,11 @@ jobs:
         qmk --verbose generate-docs
 
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@v4.7.3
+      uses: JamesIves/github-pages-deploy-action@v4.7.4
       with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: .build/docs
           clean: true
-          single-commit: true
           git-config-name: QMK Bot
           git-config-email: hello@qmk.fm
