@@ -22,7 +22,7 @@ jobs:
       run : git config --global --add safe.directory '*'
 
     - name: Checkout qmk_firmware
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         ref: develop
         repository: 'qmk/qmk_firmware'
@@ -54,7 +54,7 @@ jobs:
         qmk --verbose generate-docs
 
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@v4.8.0
+      uses: JamesIves/github-pages-deploy-action@v4.9.0
       with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
